@@ -17,56 +17,24 @@ XPCOMUtils.defineLazyGetter(this, "Helper", function() {
   return sandbox["Helper"];
 });
 
-function showToast(aWindow) {
-  aWindow.NativeWindow.toast.show(Strings.GetStringFromName("toast.message"), "short");
-}
-
 function openCast(aWindow) {
   if (!aWindow)
     return;
-  var servadress = '192.168.1.15';
+  var servadress = '192.168.1.16';
   var servport = 8282;
   var activeUrl = aWindow.BrowserApp.selectedTab.window.document.URL;
   var url = 'http://'+servadress+':'+servport+'/watch?url='+activeUrl;
   aWindow.BrowserApp.addTab(url);
 }
 
-function showDoorhanger(aWindow) {
-  let buttons = [
-    {
-      label: "Button 1",
-      callback: function() {
-        aWindow.NativeWindow.toast.show("Button 1 was tapped", "short");
-      }
-    } , {
-      label: "Button 2",
-      callback: function() {
-        aWindow.NativeWindow.toast.show("Button 2 was tapped", "short");
-      }
-    }];
-
-  aWindow.NativeWindow.doorhanger.show("Showing a doorhanger with two button choices.", "doorhanger-test", buttons);
-}
-
-function copyLink(aWindow, aTarget) {
-  let url = aWindow.NativeWindow.contextmenus._getLinkURL(aTarget);
-  aWindow.NativeWindow.toast.show("Todo: copy > " + url, "short");
-}
-
-var gToastMenuId = null;
-var gDoorhangerMenuId = null;
-var gContextMenuId = null;
+var gCastMenuId = null;
 
 function loadIntoWindow(window) {
-  gToastMenuId = window.NativeWindow.menu.add("KODI Cast", null, function() { openCast(window); });
-  gDoorhangerMenuId = window.NativeWindow.menu.add("Show Doorhanger", null, function() { showDoorhanger(window); });
-  gContextMenuId = window.NativeWindow.contextmenus.add("Copy Link", window.NativeWindow.contextmenus.linkOpenableContext, function(aTarget) { copyLink(window, aTarget); });
+  gCastMenuId = window.NativeWindow.menu.add("KODI Cast", null, function() { openCast(window); });
 }
 
 function unloadFromWindow(window) {
-  window.NativeWindow.menu.remove(gToastMenuId);
-  window.NativeWindow.menu.remove(gDoorhangerMenuId);
-  window.NativeWindow.contextmenus.remove(gContextMenuId);
+  window.NativeWindow.menu.remove(gCastMenuId);
 }
 
 /**
